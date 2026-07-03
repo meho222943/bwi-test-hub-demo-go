@@ -1,0 +1,16 @@
+# Go + go test demo for the BWI Test Hub.
+# No runtime profile ⇒ runs as a host process (DIRECT_PROCESS), needs
+# only the Go toolchain — no container runtime required.
+version: 1
+name: go-test-demo
+command:
+  argv: ["sh", "run.sh"]
+timeout:
+  durationSeconds: 180
+reportArtifacts:
+  - kind: html-report
+    path: report/index.html
+    description: go test HTML report
+  - kind: junit-xml
+    path: report/junit.xml
+    description: JUnit results
