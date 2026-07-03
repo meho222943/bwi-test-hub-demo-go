@@ -1,17 +1,21 @@
-# Go + go test demo for the BWI Test Hub.
-# No runtime profile ⇒ runs as a host process (DIRECT_PROCESS), needs
-# only the Go toolchain — no container runtime required.
+# Go + go test demo for the BWI Test Hub — CONTAINER execution.
+# Declares a runtime PROFILE (never a raw image); the hub maps it to an
+# approved image in its runner-image catalog. CGO disabled so the pure-Go
+# suite builds on the slim golang:alpine image (no gcc). No
+# environment.inherit — the image provides its own PATH/HOME (and thus
+# the Go build cache under $HOME).
 version: 1
 name: go-test-demo
 command:
   argv: ["sh", "run.sh"]
-# The hub builds a deny-by-default environment: declare exactly what
-# the run needs. `go` lives outside the default PATH on many hosts, and
-# `go build`/`go test` need HOME for the module/build cache.
+runtime:
+  profile: go-1
+  required: true
 environment:
-  inherit: ["PATH", "HOME"]
+  set:
+    CGO_ENABLED: "0"
 timeout:
-  durationSeconds: 180
+  durationSeconds: 300
 reportArtifacts:
   - kind: html-report
     path: report/index.html
