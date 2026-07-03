@@ -5,6 +5,11 @@ version: 1
 name: go-test-demo
 command:
   argv: ["sh", "run.sh"]
+# The hub builds a deny-by-default environment: declare exactly what
+# the run needs. `go` lives outside the default PATH on many hosts, and
+# `go build`/`go test` need HOME for the module/build cache.
+environment:
+  inherit: ["PATH", "HOME"]
 timeout:
   durationSeconds: 180
 reportArtifacts:
